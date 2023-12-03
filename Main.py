@@ -40,4 +40,47 @@ for i in range(len(columnas)):
         key = (columna_x, columna_y)
         coeficientes_figuras[key] = (coef_corr)
         
-    
+
+#%% SUBPLOT PARA LAS VARIABLES CON MAYOR RELACIÓN (EN GENERAL)
+
+# Ordenar el diccionario según los coeficientes de correlación de mayor a menor
+coeficientes_ordenados = sorted(coeficientes_figuras.items(), key=lambda x: abs(x[1]), reverse=True)
+
+# Seleccionar los 10 valores de correlación más altos
+top_10_coeficientes = coeficientes_ordenados[:10]
+
+# Inicializar una lista para almacenar las figuras
+top_10_figuras = []
+
+# Generar las figuras y almacenarlas en la lista
+for par_columnas, coef_corr in top_10_coeficientes:
+    figura = graficar(df, par_columnas[0], par_columnas[1])
+    top_10_figuras.append(figura)
+
+# Crear un subplot con las 10 figuras
+subplot_graficas(top_10_figuras)
+
+
+#%% SUBPLOT PARA LAS VARIABLES CON MAYOR RELACIÓN (CON LA VARIABLE OBJETIVO)
+
+# Filtrar combinaciones que incluyen 'price'
+combinaciones_con_price = [item for item in coeficientes_figuras.items() if 'price' in item[0]]
+
+# Ordenar el diccionario según los coeficientes de correlación de mayor a menor
+coeficientes_ordenados_price = sorted(combinaciones_con_price, key=lambda x: abs(x[1]), reverse=True)
+
+# Seleccionar los 10 valores de correlación más altos
+top_10_coeficientes_price = coeficientes_ordenados_price[:10]
+
+# Inicializar una lista para almacenar las figuras
+top_10_figuras_price = []
+
+# Generar las figuras y almacenarlas en la lista
+for (columna_x, columna_y), coef_corr in top_10_coeficientes_price:
+    figura = graficar(df, columna_x, columna_y)
+    top_10_figuras_price.append(figura)
+
+# Crear un subplot con las 10 figuras
+subplot_graficas(top_10_figuras_price)
+  
+  
