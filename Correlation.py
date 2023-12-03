@@ -63,10 +63,11 @@ def graficar(df, columna_x, columna_y):
     # Configurar etiquetas y título automáticamente
     ax.set_xlabel(columna_x)
     ax.set_ylabel(columna_y)
-    ax.set_title(f'Relación {columna_x} y {columna_y}')
+    #ax.set_title(f'Relación {columna_x} y {columna_y}')
+    ax.set_title(f'Relación {columna_x} y {columna_y}\nCoeficiente de Pearson: {correlacion:.2f}')
     
     # Mostrar el coeficiente de correlación en la leyenda
-    ax.legend(title=f'Coeficiente de Pearson: {correlacion:.2f}')
+    #ax.legend(title=f'Coeficiente de Pearson: {correlacion:.2f}')
 
     # Mostrar la grilla
     ax.grid(True)
@@ -74,3 +75,37 @@ def graficar(df, columna_x, columna_y):
     return ax
 
 
+# Función para generar un subplot
+def subplot_graficas(axs):
+    """
+    Crea un subplot que muestra varias gráficas generadas con la función 'graficar'.
+
+    Parámetros:
+    - axs: Lista de ejes generados por la función 'graficar'.
+    """
+    num_graficas = len(axs)
+    num_filas = (num_graficas // 2) + (num_graficas % 2)  # Calcula el número de filas para el subplot
+
+    fig, axs_subplot = plt.subplots(num_filas, 2, figsize=(12, num_filas * 5))
+
+    for i, ax in enumerate(axs):
+        fila = i // 2
+        columna = i % 2
+
+        # Copiar el contenido del eje original al nuevo subplot
+        axs_subplot[fila, columna].scatter(ax.collections[0].get_offsets()[:, 0], ax.collections[0].get_offsets()[:, 1])
+        axs_subplot[fila, columna].plot(ax.lines[0].get_xdata(), ax.lines[0].get_ydata(), color='red', label='Regresión Lineal')
+
+        # Configurar etiquetas y título
+        axs_subplot[fila, columna].set_xlabel(ax.get_xlabel())
+        axs_subplot[fila, columna].set_ylabel(ax.get_ylabel())
+        axs_subplot[fila, columna].set_title(ax.get_title())
+
+        # Mostrar la grilla
+        axs_subplot[fila, columna].grid(True)
+
+        #correlacion = float(ax.get_legend().get_title().get_text().split()[-1])
+        #axs_subplot[fila, columna].legend(title=f'Coeficiente de Pearson: {correlacion:.2f}')
+
+    plt.tight_layout()
+    plt.show()
